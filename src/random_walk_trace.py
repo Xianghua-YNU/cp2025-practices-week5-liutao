@@ -79,6 +79,7 @@ if __name__ == "__main__":
     # 任务1：单条轨迹可视化
     plt.figure(figsize=(8, 8))
     walk_path = random_walk_2d(1000)
+    plt.title('Single Random Walk Trajectory')
     plot_single_walk(walk_path)
     plt.show()
     
