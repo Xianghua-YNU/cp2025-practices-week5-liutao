@@ -2,87 +2,109 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 def random_walk_2d(steps):
-    """
-    生成二维对角随机行走轨迹
+    """生成二维随机行走轨迹
+    
     参数:
-        steps (int): 行走步数
+        steps (int): 随机行走的步数
+        
     返回:
-        tuple: (x坐标数组, y坐标数组)
+        tuple: 包含x和y坐标序列的元组 (x_coords, y_coords)
     """
-    # 生成x和y方向的随机步长（-1或1）
+    # TODO: 实现随机行走算法
+    # 提示：
+    # 1. 使用 np.random.choice 生成随机步长 ([-1, 1])
+    # 2. 分别生成x和y方向的步长序列
+    # 3. 使用 cumsum() 计算累积和得到轨迹
+    生成x和y方向的随机步长（-1或1）
     x_steps = np.random.choice([-1, 1], size=steps)
     y_steps = np.random.choice([-1, 1], size=steps)
     
-    # 计算累积位置（从原点0开始）
+    # 计算累积和得到轨迹坐标
     x_coords = np.cumsum(x_steps)
     y_coords = np.cumsum(y_steps)
     
-    # 在数组开头插入起点(0,0)
+    # 在坐标序列前插入起点(0,0)
     x_coords = np.insert(x_coords, 0, 0)
     y_coords = np.insert(y_coords, 0, 0)
     
     return x_coords, y_coords
+    
 
 def plot_single_walk(path):
-    """
-    绘制单条随机行走轨迹
+    """绘制单个随机行走轨迹
+    
     参数:
-        path (tuple): 由random_walk_2d生成的坐标元组
+        path (tuple): 包含x和y坐标序列的元组
     """
-    x, y = path
+    # TODO: 实现单个轨迹的绘制
+    # 提示：
+    # 1. 使用 plt.plot 绘制轨迹线
+    # 2. 使用 plt.scatter 标记起点和终点
+    # 3. 设置坐标轴比例相等
+    # 4. 添加图例
+     x_coords, y_coords = path
     
-    # 绘制轨迹线（蓝色细线）
-    plt.plot(x, y, 'b-', linewidth=0.8, alpha=0.7)
+    # 绘制轨迹线
+    plt.plot(x_coords, y_coords, 'b-', linewidth=0.5, label='Path')
     
-    # 标记起点(绿色)和终点(红色)
-    plt.scatter(x[0], y[0], c='lime', s=80, label=f'Start ({x[0]},{y[0]})')
-    plt.scatter(x[-1], y[-1], c='red', s=80, label=f'End ({x[-1]},{y[-1]})')
+    # 标记起点和终点
+    plt.scatter(x_coords[0], y_coords[0], c='green', s=50, label='Start (0,0)')
+    plt.scatter(x_coords[-1], y_coords[-1], c='red', s=50, label=f'End ({x_coords[-1]},{y_coords[-1]})')
     
     # 设置图形属性
-    plt.axis('equal')  # 确保坐标轴比例相同
-    plt.grid(True, linestyle='--', alpha=0.4)
-    plt.title(f'2D Random Walk ({len(x)-1} steps)')
-    plt.xlabel('X Position')
-    plt.ylabel('Y Position')
-    plt.legend(loc='best')
+    plt.axis('equal')
+    plt.title(f'2D Random Walk ({len(x_coords)-1} steps)')
+    plt.xlabel('X position')
+    plt.ylabel('Y position')
+    plt.grid(True, linestyle='--', alpha=0.5)
+    plt.legend()
     plt.tight_layout()
+    
 
 def plot_multiple_walks():
-    """在2x2网格中绘制四条独立随机行走轨迹"""
-    # 创建画布和子图
-    fig, axs = plt.subplots(2, 2, figsize=(10, 10))
-    fig.suptitle('Comparison of 4 Random Walks (1000 steps each)', y=1.02)
+    """在2x2子图中绘制四个不同的随机行走轨迹"""
+    # TODO: 实现多个轨迹的绘制
+    # 提示：
+    # 1. 创建2x2的子图布局
+    # 2. 对每个子图重复以下步骤：
+    #    - 生成随机行走轨迹
+    #    - 绘制轨迹线
+    #    - 标记起点和终点
+    #    - 设置标题和图例
+    fig, axes = plt.subplots(2, 2, figsize=(10, 8))
+    fig.suptitle('Four Different 2D Random Walks (1000 steps each)', y=1.02)
     
-    # 扁平化子图数组便于遍历
-    axs = axs.ravel()
-    
-    for i in range(4):
-        # 生成新轨迹
-        x, y = random_walk_2d(1000)
+    for i, ax in enumerate(axes.flat):
+        # 生成随机行走轨迹
+        x_coords, y_coords = random_walk_2d(1000)
         
-        # 在当前子图绘制
-        axs[i].plot(x, y, 'b-', linewidth=0.8, alpha=0.7)
-        axs[i].scatter(x[0], y[0], c='lime', s=60)
-        axs[i].scatter(x[-1], y[-1], c='red', s=60)
+        # 绘制轨迹线
+        ax.plot(x_coords, y_coords, linewidth=0.5)
+        
+        # 标记起点和终点
+        ax.scatter(x_coords[0], y_coords[0], c='green', s=30)
+        ax.scatter(x_coords[-1], y_coords[-1], c='red', s=30)
         
         # 设置子图属性
-        axs[i].set_title(f'Trajectory {i+1}')
-        axs[i].set_xlabel('X Position')
-        axs[i].set_ylabel('Y Position')
-        axs[i].axis('equal')
-        axs[i].grid(True, linestyle='--', alpha=0.4)
+        ax.set_title(f'Walk {i+1}')
+        ax.set_xlabel('X position')
+        ax.set_ylabel('Y position')
+        ax.axis('equal')
+        ax.grid(True, linestyle='--', alpha=0.5)
     
-    # 调整子图间距
     plt.tight_layout()
+    
 
 if __name__ == "__main__":
-    # 任务1：单条轨迹可视化
-    plt.figure(figsize=(8, 8))
-    walk_path = random_walk_2d(1000)
-    plt.title('Single Random Walk Trajectory')
-    plot_single_walk(walk_path)
+    # TODO: 完成主程序逻辑
+    # 1. 生成并绘制单个轨迹
+    # 2. 生成并绘制多个轨迹
+    plt.figure(figsize=(8, 6))
+    path = random_walk_2d(1000)
+    plot_single_walk(path)
     plt.show()
     
-    # 任务2：多条轨迹对比
+    # 生成并绘制多个轨迹
     plot_multiple_walks()
     plt.show()
+    
